@@ -12,7 +12,9 @@ class FAQChatbot:
 
     def load_faqs(self, filepath):
         with open(filepath, 'r', encoding='utf-8') as file:
-            return json.load(file)
+            data = json.load(file)
+            faqs = {item['question']: item['answer'] for item in data['faqs']}
+            return faqs
 
     def generate_response(self, user_input):
         user_vector = TfidfVectorizer().fit(self.questions).transform([user_input])
@@ -27,11 +29,14 @@ class FAQChatbot:
 chatbot = FAQChatbot('faqs.json')
 
 # Create the Streamlit app
-st.title("FAQ Chatbot")
-st.write("Enter your message below:")
+st.title("Labour Law Chatbot")
+st.write("Enter your question below:")
 
 user_input = st.text_input("User Input")
 if st.button("Submit"):
     response = chatbot.generate_response(user_input)
     st.write("Chatbot Response:", response)
+
+
+
 
